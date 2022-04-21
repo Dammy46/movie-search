@@ -1,25 +1,38 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import CardList from './CardList';
+import Scrol from './ScrollList';
+import {movies} from './movies'
+import Searchbox from './searchInput';
 import './App.css';
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      movies: movies,
+      searchF: '',
+    };
+  }
+  OninputChange = event => {
+    this.setState({ searchF: event.target.value });
+  };
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  render() {
+    const filterMovie = this.state.movies.filter(movie => {
+      return movie.name.toLowerCase().includes(this.state.searchF.toLowerCase());
+    });
+    if (!this.state.movies.length) {
+      return <h1>LOADING....</h1>;
+    }
+    return (
+      <div className="tc">
+        <h1 className="f1">Movies</h1>
+        <Searchbox inputChange={this.OninputChange} />
+        <Scrol>
+          <CardList movies={filterMovie} />
+        </Scrol>
+      </div>
+    );
+  }
 }
 
 export default App;
